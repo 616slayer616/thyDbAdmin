@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>ThyDbAdmin</title>
+</head>
+<body>
+<div th:fragment="columnlist">
+    <div th:replace="fragments/query::query"></div>
+    <table style="width:100%; border: 1px solid black;">
+        <tr>
+            <th th:each="column : ${columns}"><span th:text="${column}"></span></th>
+        </tr>
+        <tr th:each="row : ${rows}">
+            <th th:each="col : ${row}"><span th:text="${col}"></span></th>
+        </tr>
+    </table>
+    <div th:replace="fragments/query::pagination"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>ThyDbAdmin</title>
+</head>
+<body>
+<div th:fragment="query">
+    <form th:action="@{/thyDbAdmin/executeQuery}" method="post">
+        <span th:if="${error != null}" th:text="${error}"></span>
+        <input type="text" name="query">
+        <button type="submit">GO</button>
+    </form>
+</div>
+
+<div th:fragment="pagination">     
+    <div th:if="${pages} != 0" th:remove="tag">     
+        <a th:href="@{|/thyDbAdmin/table/${tableName}?page=${page <= 0 ? 0 : page - 1}&pageSize=${pageSize}|}">
+            <span aria-hidden="true">«</span></a>
+
+        <div th:attr="class=|page-item ${i == page ? 'active' : ''}|"
+             th:each="i : ${#numbers.sequence(0, pages - 1)}" th:remove="tag">
+              <a th:href="@{|/thyDbAdmin/table/${tableName}?page=${i}& pageSize=${pageSize}|}"
+                 th:if="i != page"
+                 th:text="${i + 1}"></a>
+            <span th:if="i == page " aria-hidden="true" th:text="${i + 1}"></span>
+        </div>
+          
+        <a th:href="@{|/thyDbAdmin/table/${tableName}?page=${page >= pages - 1 ? pages - 1 : page + 1}&pageSize=${pageSize}|}">
+            <span aria-hidden="true">»</span></a>
+    </div>
+</div>
+</body>
+</html>

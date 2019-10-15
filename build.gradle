@@ -1,0 +1,130 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+    id 'jacoco'
+    id 'org.sonarqube' version '2.8'
+    id 'org.springframework.boot' version '2.2.0.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+}
+
+group 'org.padler'
+version '1.0.0'
+
+sourceCompatibility = 1.8
+
+test {
+    useJUnitPlatform()
+}
+
+jacoco {
+    toolVersion = "0.8.5"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation('org.springframework.boot:spring-boot-devtools')
+
+    // Test
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('org.springframework.security:spring-security-test')
+    testImplementation('com.h2database:h2')
+
+    testImplementation('org.junit.jupiter:junit-jupiter-engine')
+    testImplementation('org.mockito:mockito-junit-jupiter')
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "thyDbAdmin"
+        property "sonar.projectKey", "616slayer616_thyDbAdmin"
+    }
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    archiveClassifier = 'javadoc'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'thyDbAdmin'
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'thyDbAdmin'
+                description = 'Thymeleaf DB admininstration'
+                url = 'http://github.com/616slayer616/thyDbAdmin'
+                licenses {
+                    license {
+                        name = 'License'
+                        url = 'https://github.com/616slayer616/thyDbAdmin/blob/master/LICENSE'
+                    }
+                }
+                developers {
+                    developer {
+                        id = '616slayer616'
+                        name = 'Patrick Adler'
+                        email = 'patrick@padler.org'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/616slayer616/thyDbAdmin.git'
+                    developerConnection = 'scm:git:ssh://github.com/616slayer616/thyDbAdmin.git'
+                    url = 'http://github.com/616slayer616/thyDbAdmin'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = project.hasProperty("sonatypeUsername") ? sonatypeUsername : ""
+                password = project.hasProperty("sonatypePassword") ? sonatypePassword : ""
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}

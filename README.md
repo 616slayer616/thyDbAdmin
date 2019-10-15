@@ -1,0 +1,24 @@
+# thyDbAdmin
+[![Build Status](https://travis-ci.org/616slayer616/thyDbAdmin.svg?branch=master)](https://travis-ci.org/616slayer616/thyDbAdmin)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=616slayer616_thyDbAdmin&metric=alert_status)](https://sonarcloud.io/dashboard?id=616slayer616_thyDbAdmin)
+
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=616slayer616_thyDbAdmin&metric=bugs)](https://sonarcloud.io/dashboard?id=616slayer616_thyDbAdmin)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=616slayer616_thyDbAdmin&metric=code_smells)](https://sonarcloud.io/dashboard?id=616slayer616_thyDbAdmin)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=616slayer616_thyDbAdmin&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=616slayer616_thyDbAdmin)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=616slayer616_thyDbAdmin&metric=coverage)](https://sonarcloud.io/dashboard?id=616slayer616_thyDbAdmin)
+
+## Usage
+
+### Gradle
+```
+implementation 'org.padler:thyDbAdmin:1.0.0'
+```
+
+### Maven
+```
+<dependency>
+  <groupId>org.padler</groupId>
+  <artifactId>thyDbAdmin</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```

@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>ThyDbAdmin</title>
+</head>
+<body>
+<div th:fragment="tableList">
+    <div th:replace="fragments/query::query"></div>
+    <ul th:each="table : ${tables}" style="list-style-type:none">
+        <a th:text="${table}" th:href="'thyDbAdmin/table/' + ${table}"></a>
+    </ul>
+</div>
+</body>
+</html>
