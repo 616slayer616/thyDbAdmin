@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:include="fragments/thyDbAheader :: header">
+</head>
+<body>
+<th:block th:replace="fragments/thyDbAnav :: nav"></th:block>
+<div class="container mt-3">
+    <table class="table table-bordered table-striped">
+        <tr>
+            <td>URL in use</td>
+            <td>[[${info.URL}]]</td>
+        </tr>
+        <tr>
+            <td>User name</td>
+            <td>[[${info.userName}]]</td>
+        </tr>
+        <tr>
+            <td>DBMS name</td>
+            <td>[[${info.databaseProductName}]]</td>
+        </tr>
+        <tr>
+            <td>DBMS version</td>
+            <td>[[${info.databaseProductVersion}]]</td>
+        </tr>
+        <tr>
+            <td>Driver name</td>
+            <td>[[${info.driverName}]]</td>
+        </tr>
+        <tr>
+            <td>Driver version</td>
+            <td>[[${info.driverVersion}]]</td>
+        </tr>
+        <tr>
+            <td>supp. SQL Keywords</td>
+            <td>[[${info.sQLKeywords}]]</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

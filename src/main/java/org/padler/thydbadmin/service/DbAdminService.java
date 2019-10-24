@@ -72,6 +72,14 @@ public class DbAdminService {
         return new ArrayList<>(result.values());
     }
 
+    public DatabaseMetaData getInfo() {
+        try (Connection connection = dataSource.getConnection()) {
+            return connection.getMetaData();
+        } catch (SQLException e) {
+            throw new JDBCException("", e);
+        }
+    }
+
     public Page<Object[]> getData(String tableName, int page, int pageSize) {
         List<String> tables = getTables();
         Optional<String> first = tables.stream().filter(s -> s.equalsIgnoreCase(tableName)).findFirst();
@@ -86,4 +94,5 @@ public class DbAdminService {
 
         return (Page<Object[]>) new PageImpl(select.getResultList(), PageRequest.of(page, pageSize), countResult.longValue());
     }
+
 }

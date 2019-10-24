@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 
+import java.sql.DatabaseMetaData;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = TestApplication.class)
 class DbAdminServiceTest {
@@ -29,7 +29,7 @@ class DbAdminServiceTest {
     @Test
     void INSERT_USER() {
         List rolesBefore = dbAdminService.executeQuery("SELECT * FROM USER_ROLE");
-        dbAdminService.executeQuery("INSERT INTO USER_ROLE (`USER_ROLE_ID`, `NAME`) VALUES (2, 'ROLE_USER')");
+        dbAdminService.executeQuery("INSERT INTO USER_ROLE (`USER_ROLE_ID`, `NAME`) VALUES (12, 'ROLE_USER')");
         List rolesAfter = dbAdminService.executeQuery("SELECT * FROM USER_ROLE");
 
         assertThat(rolesAfter.size(), is(rolesBefore.size() + 1));
@@ -52,10 +52,16 @@ class DbAdminServiceTest {
     }
 
     @Test
+    void getInfo() {
+        DatabaseMetaData databaseMetaData = dbAdminService.getInfo();
+        assertNotNull(databaseMetaData);
+    }
+
+    @Test
     void getData() {
         Page<Object[]> usersRoles = dbAdminService.getData("USER_ROLE", 0, 10);
 
-        assertThat(usersRoles.getTotalElements(), is(1L));
+        assertThat(usersRoles.getTotalElements(), is(11L));
     }
 
     @Test

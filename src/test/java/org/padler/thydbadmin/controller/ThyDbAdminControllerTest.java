@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.persistence.PersistenceException;
+import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,8 +22,7 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.*;
 import static org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint.NONE;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -70,6 +70,15 @@ class ThyDbAdminControllerTest {
         mockMvc.perform(get("/thyDbAdmin/table/TEST_COLUMN"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("TEST_COLUMN")));
+    }
+
+    @Test
+    void info() throws Exception {
+        DatabaseMetaData databseMetaData = mock(DatabaseMetaData.class);
+        doReturn(databseMetaData).when(mockDbAdminService).getInfo();
+
+        mockMvc.perform(get("/thyDbAdmin/info"))
+                .andExpect(status().isOk());
     }
 
     @Test

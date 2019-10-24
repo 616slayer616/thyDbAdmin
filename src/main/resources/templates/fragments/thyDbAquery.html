@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+</head>
+<body>
+<div th:fragment="query">
+    <form th:action="@{/thyDbAdmin/executeQuery}" method="post">
+        <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
+        </div>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="SQL Query" name="query">
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary" type="submit">GO</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div th:fragment="pagination">     
+    <div th:if="${pages} != 0" th:remove="tag">   
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item">
+                <a th:href="@{|/thyDbAdmin/table/${tableName}?page=${page <= 0 ? 0 : page - 1}&pageSize=${pageSize}|}"
+                   class="page-link"><span aria-hidden="true">«</span></a>
+            </li>
+
+            <div th:each="i : ${#numbers.sequence(0, pages - 1)}" th:remove="tag">
+                <li class="page-item" th:attr="class=|page-item ${i == page ? 'active' : ''}|">
+                    <a th:href="@{|/thyDbAdmin/table/${tableName}?page=${i}& pageSize=${pageSize}|}"
+                       th:if="i != page" th:text="${i + 1}" class="page-link"></a>
+                </li>
+            </div>
+
+            <li class="page-item">
+                <a th:href="@{|/thyDbAdmin/table/${tableName}?page=${page >= pages - 1 ? pages - 1 : page + 1}&pageSize=${pageSize}|}"
+                   class="page-link"><span aria-hidden="true">»</span></a>
+            </li>
+
+        </ul>
+    </div>
+</div>
+</body>
+</html>
