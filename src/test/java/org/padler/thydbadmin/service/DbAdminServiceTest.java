@@ -2,9 +2,8 @@ package org.padler.thydbadmin.service;
 
 import org.hibernate.exception.SQLGrammarException;
 import org.junit.jupiter.api.Test;
-import org.padler.thydbadmin.TestApplication;
+import org.padler.thydbadmin.AbstractSpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 
 import java.sql.DatabaseMetaData;
@@ -14,8 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(classes = TestApplication.class)
-class DbAdminServiceTest {
+class DbAdminServiceTest extends AbstractSpringBootTest {
 
     @Autowired
     private DbAdminService dbAdminService;
