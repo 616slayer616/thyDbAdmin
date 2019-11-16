@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 
 import java.sql.DatabaseMetaData;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -20,17 +21,18 @@ class DbAdminServiceTest extends AbstractSpringBootTest {
 
     @Test
     void SELECT_ALL() {
-        List list = dbAdminService.executeQuery("SELECT * FROM USERS");
-        assertTrue(list.isEmpty());
+        Page<Map<String, Object>> result = dbAdminService.executeQuery("SELECT * FROM USERS");
+        assertTrue(result.getContent().isEmpty());
+        assertTrue(result.getTotalElements() == 0);
     }
 
     @Test
     void INSERT_USER() {
-        List rolesBefore = dbAdminService.executeQuery("SELECT * FROM USER_ROLE");
+        Page<Map<String, Object>> rolesBefore = dbAdminService.executeQuery("SELECT * FROM USER_ROLE");
         dbAdminService.executeQuery("INSERT INTO USER_ROLE (`USER_ROLE_ID`, `NAME`) VALUES (12, 'ROLE_USER')");
-        List rolesAfter = dbAdminService.executeQuery("SELECT * FROM USER_ROLE");
+        Page<Map<String, Object>> rolesAfter = dbAdminService.executeQuery("SELECT * FROM USER_ROLE");
 
-        assertThat(rolesAfter.size(), is(rolesBefore.size() + 1));
+        assertThat(rolesAfter.getTotalElements(), is(rolesBefore.getTotalElements() + 1));
     }
 
     @Test

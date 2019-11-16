@@ -8,7 +8,7 @@
         <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
         </div>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="SQL Query" name="query">
+            <input type="text" class="form-control" placeholder="SQL Query" name="query" th:value="${query}">
             <div class="input-group-append">
                 <button class="btn btn-outline-primary" type="submit">GO</button>
             </div>
@@ -17,7 +17,7 @@
 </div>
 
 <div th:fragment="pagination">     
-    <div th:if="${pages} != 0" th:remove="tag">   
+    <th:block th:if="${pages != null && pages != 0}">   
         <ul class="pagination justify-content-center">
 
             <li class="page-item">
@@ -25,12 +25,12 @@
                    class="page-link"><span aria-hidden="true">«</span></a>
             </li>
 
-            <div th:each="i : ${#numbers.sequence(0, pages - 1)}" th:remove="tag">
+            <th:block th:each="i : ${#numbers.sequence(0, pages - 1)}">
                 <li class="page-item" th:attr="class=|page-item ${i == page ? 'active' : ''}|">
                     <a th:href="@{|/thyDbAdmin/table/${tableName}?page=${i}& pageSize=${pageSize}|}"
                        th:if="i != page" th:text="${i + 1}" class="page-link"></a>
                 </li>
-            </div>
+            </th:block>
 
             <li class="page-item">
                 <a th:href="@{|/thyDbAdmin/table/${tableName}?page=${page >= pages - 1 ? pages - 1 : page + 1}&pageSize=${pageSize}|}"
@@ -38,7 +38,47 @@
             </li>
 
         </ul>
-    </div>
+    </th:block>
+</div>
+
+<div th:fragment="queryPagination">     
+    <th:block th:if="${pages != null && pages != 0}">   
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item">
+                <form th:action="@{/thyDbAdmin/executeQuery}" method="post">
+                    <input type="hidden" class="form-control" name="query" th:value="${query}">
+                    <input type="hidden" class="form-control" name="page" th:value="${page <= 0 ? 0 : page - 1}">
+                    <input type="hidden" class="form-control" name="pageSize" th:value="${pageSize}">
+                    <a href='#' class="page-link" onclick='this.parentNode.submit(); return false;'>«</a>
+                </form>
+            </li>
+
+            <th:block th:each="i : ${#numbers.sequence(0, pages - 1)}">
+                <li class="page-item" th:attr="class=|page-item ${i == page ? 'active' : ''}|">
+                    <form th:action="@{/thyDbAdmin/executeQuery}" method="post">
+                        <input type="hidden" class="form-control" name="query" th:value="${query}">
+                        <input type="hidden" class="form-control" name="page" th:value="${i}">
+                        <input type="hidden" class="form-control" name="pageSize" th:value="${pageSize}">
+                        <a href='#' class="page-link" onclick='this.parentNode.submit(); return false;'
+                           th:if="i != page"
+                           th:text="${i + 1}"></a>
+                    </form>
+                </li>
+            </th:block>
+
+            <li class="page-item">
+                <form th:action="@{/thyDbAdmin/executeQuery}" method="post">
+                    <input type="hidden" class="form-control" name="query" th:value="${query}">
+                    <input type="hidden" class="form-control" name="page"
+                           th:value="${page >= pages - 1 ? pages - 1 : page + 1}">
+                    <input type="hidden" class="form-control" name="pageSize" th:value="${pageSize}">
+                    <a href='#' class="page-link" onclick='this.parentNode.submit(); return false;'>»</a>
+                </form>
+            </li>
+
+        </ul>
+    </th:block>
 </div>
 </body>
 </html>

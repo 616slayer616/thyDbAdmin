@@ -30,9 +30,14 @@ public class DbAdminService {
     }
 
     @SuppressWarnings("squid:S1168")
-    public List<Map<String, Object>> executeQuery(String sql) {
+    public Page<Map<String, Object>> executeQuery(String sql) {
+        return executeQuery(sql, 0, 10);
+    }
+
+    @SuppressWarnings("squid:S1168")
+    public Page<Map<String, Object>> executeQuery(String sql, int page, int pageSize) {
         try {
-            return dataAccessService.executeQuery(sql);
+            return dataAccessService.executeQuery(sql, page, pageSize);
         } catch (Exception e) {
             dataAccessService.executeUpdate(sql);
             return null;

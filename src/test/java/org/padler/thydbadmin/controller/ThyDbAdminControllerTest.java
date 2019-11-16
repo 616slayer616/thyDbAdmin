@@ -85,9 +85,9 @@ class ThyDbAdminControllerTest extends AbstractSpringBootTest {
 
     @Test
     void executeQuery_SELECT() throws Exception {
-        List<Map<String, Object>> result = new ArrayList<>();
-        result.add(Collections.singletonMap("col", "data"));
-        doReturn(result).when(mockDbAdminService).executeQuery("SELECT * FROM USERS");
+        Map<String, Object> resultMap = Collections.singletonMap("col", "data");
+        Page<Map<String, Object>> result = new PageImpl<>(Collections.singletonList(resultMap), PageRequest.of(0, 10), 0);
+        doReturn(result).when(mockDbAdminService).executeQuery(eq("SELECT * FROM USERS"), anyInt(), anyInt());
 
         mockMvc.perform(post("/thyDbAdmin/executeQuery")
                 .param("query", "SELECT * FROM USERS"))
@@ -97,8 +97,8 @@ class ThyDbAdminControllerTest extends AbstractSpringBootTest {
 
     @Test
     void executeQuery_SELECT_empty() throws Exception {
-        List<Map<String, Object>> result = new ArrayList<>();
-        doReturn(result).when(mockDbAdminService).executeQuery("SELECT * FROM USERS");
+        Page<Map<String, Object>> result = new PageImpl<>(Collections.emptyList(), PageRequest.of(0, 10), 0);
+        doReturn(result).when(mockDbAdminService).executeQuery(eq("SELECT * FROM USERS"), anyInt(), anyInt());
 
         mockMvc.perform(post("/thyDbAdmin/executeQuery")
                 .param("query", "SELECT * FROM USERS"))
@@ -108,7 +108,7 @@ class ThyDbAdminControllerTest extends AbstractSpringBootTest {
 
     @Test
     void executeQuery_UPDATE() throws Exception {
-        doReturn(null).when(mockDbAdminService).executeQuery("UPDATE");
+        doReturn(null).when(mockDbAdminService).executeQuery(eq("UPDATE"), anyInt(), anyInt());
 
         mockMvc.perform(post("/thyDbAdmin/executeQuery")
                 .param("query", "UPDATE")
@@ -122,7 +122,7 @@ class ThyDbAdminControllerTest extends AbstractSpringBootTest {
         Throwable cause1 = new Throwable();
         Throwable cause2 = new Throwable(cause1);
         PersistenceException persistenceException = new PersistenceException(cause2);
-        doThrow(persistenceException).when(mockDbAdminService).executeQuery("UPDATE");
+        doThrow(persistenceException).when(mockDbAdminService).executeQuery(eq("UPDATE"), anyInt(), anyInt());
 
         mockMvc.perform(post("/thyDbAdmin/executeQuery")
                 .param("query", "UPDATE")

@@ -22,6 +22,10 @@ public class ThyDbAdminController {
 
     public static final String COLUMNS = "columns";
     public static final String TABLE = "table";
+    public static final String PAGE = "page";
+    public static final String PAGES = "pages";
+    public static final String PAGE_SIZE = "pageSize";
+    public static final String QUERY = "query";
     private final DbAdminService dbAdminService;
 
     public ThyDbAdminController(DbAdminService dbAdminService) {
@@ -43,9 +47,9 @@ public class ThyDbAdminController {
         model.addAttribute("tableName", tableName);
         model.addAttribute(COLUMNS, columns);
         model.addAttribute("rows", result.getContent());
-        model.addAttribute("page", page);
-        model.addAttribute("pages", result.getTotalPages());
-        model.addAttribute("pageSize", pageSize);
+        model.addAttribute(PAGE, page);
+        model.addAttribute(PAGES, result.getTotalPages());
+        model.addAttribute(PAGE_SIZE, pageSize);
         model.addAttribute("total", result.getTotalElements());
         return TABLE;
     }
@@ -63,24 +67,32 @@ public class ThyDbAdminController {
     }
 
     @PostMapping("/executeQuery")
-    public String postExecuteQuery(String query, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public String postExecuteQuery(String query, HttpServletRequest request, RedirectAttributes redirectAttributes,
+                                   @RequestParam(required = false, defaultValue = "0") int page,
+                                   @RequestParam(required = false, defaultValue = "10") int pageSize) {
         String referer = request.getHeader("Referer");
 
-        List<Map<String, Object>> list = null;
+        Page<Map<String, Object>> result = null;
         try {
-            list = dbAdminService.executeQuery(query);
+            result = dbAdminService.executeQuery(query, page, pageSize);
         } catch (PersistenceException e) {
             redirectAttributes.addFlashAttribute("error", e.getCause().getCause().getMessage());
         }
 
-        if (list == null) {
+        if (result == null) {
             return "redirect:" + referer;
         }
 
+        List<Map<String, Object>> list = result.getContent();
         ArrayList<String> columns = null;
         if (!list.isEmpty())
             columns = new ArrayList<>(list.get(0).keySet());
         redirectAttributes.addFlashAttribute(COLUMNS, columns);
+
+        redirectAttributes.addFlashAttribute(PAGE, page);
+        redirectAttributes.addFlashAttribute(PAGES, result.getTotalPages());
+        redirectAttributes.addFlashAttribute(PAGE_SIZE, pageSize);
+        redirectAttributes.addFlashAttribute(QUERY, query);
         redirectAttributes.addFlashAttribute("data", list);
         return "redirect:" + "queryResult";
     }
