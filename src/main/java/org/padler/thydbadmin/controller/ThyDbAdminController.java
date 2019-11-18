@@ -27,7 +27,9 @@ public class ThyDbAdminController {
     public static final String PAGE = "page";
     public static final String PAGES = "pages";
     public static final String PAGE_SIZE = "pageSize";
+    public static final String ROWS = "rows";
     public static final String QUERY = "query";
+    public static final String TOTAL = "total";
     private final DbAdminService dbAdminService;
 
     public ThyDbAdminController(DbAdminService dbAdminService) {
@@ -48,11 +50,11 @@ public class ThyDbAdminController {
         Page<Object[]> result = dbAdminService.getData(tableName, page, pageSize);
         model.addAttribute("tableName", tableName);
         model.addAttribute(COLUMNS, columns);
-        model.addAttribute("rows", result.getContent());
+        model.addAttribute(ROWS, result.getContent());
         model.addAttribute(PAGE, page);
         model.addAttribute(PAGES, result.getTotalPages());
         model.addAttribute(PAGE_SIZE, pageSize);
-        model.addAttribute("total", result.getTotalElements());
+        model.addAttribute(TOTAL, result.getTotalElements());
         return TABLE;
     }
 
@@ -92,12 +94,12 @@ public class ThyDbAdminController {
             columns = new ArrayList<>(result.getContent().get(0).keySet());
         redirectAttributes.addFlashAttribute(COLUMNS, columns);
 
-        redirectAttributes.addFlashAttribute("rows", list);
+        redirectAttributes.addFlashAttribute(ROWS, list);
         redirectAttributes.addFlashAttribute(PAGE, page);
         redirectAttributes.addFlashAttribute(PAGES, result.getTotalPages());
         redirectAttributes.addFlashAttribute(PAGE_SIZE, pageSize);
         redirectAttributes.addFlashAttribute(QUERY, query);
-        redirectAttributes.addFlashAttribute("total", result.getTotalElements());
+        redirectAttributes.addFlashAttribute(TOTAL, result.getTotalElements());
         return "redirect:" + "queryResult";
     }
 

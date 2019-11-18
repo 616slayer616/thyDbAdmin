@@ -8,10 +8,10 @@
     <th:block th:fragment="tableList">
         <th:block th:fragment="tableList">
             <th:block th:replace="fragments/thyDbAquery::query"></th:block>
-            <ul th:each="table : ${tables}" class="list-group">
+            <div th:each="table : ${tables}" class="list-group">
                 <a th:text="${table}" th:href="'thyDbAdmin/table/' + ${table}"
                    class="list-group-item list-group-item-action"></a>
-            </ul>
+            </div>
         </th:block>
     </th:block>
 </div>
