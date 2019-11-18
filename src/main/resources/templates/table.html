@@ -6,14 +6,7 @@
 <th:block th:replace="fragments/thyDbAnav :: nav"></th:block>
 <div class="container mt-3">
     <th:block th:replace="fragments/thyDbAquery::query"></th:block>
-    <table class="table table-bordered table-striped">
-        <tr>
-            <th th:each="column : ${columns}"><span th:text="${column}"></span></th>
-        </tr>
-        <tr th:each="row : ${rows}">
-            <th th:each="col : ${row}"><span th:text="${col}"></span></th>
-        </tr>
-    </table>
+    <th:block th:replace="fragments/thyDbAquery::queryResult"></th:block>
     <div th:replace="fragments/thyDbAquery::pagination"></div>
 </div>
 </body>

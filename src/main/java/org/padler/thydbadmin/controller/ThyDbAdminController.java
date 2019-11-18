@@ -12,8 +12,10 @@ import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @ConditionalOnProperty("thyDbAdmin.controller")
 @Controller
@@ -83,17 +85,18 @@ public class ThyDbAdminController {
             return "redirect:" + referer;
         }
 
-        List<Map<String, Object>> list = result.getContent();
+        List<Collection<Object>> list = result.getContent().stream()
+                .map(Map::values).collect(Collectors.toList());
         ArrayList<String> columns = null;
         if (!list.isEmpty())
-            columns = new ArrayList<>(list.get(0).keySet());
+            columns = new ArrayList<>(result.getContent().get(0).keySet());
         redirectAttributes.addFlashAttribute(COLUMNS, columns);
 
         redirectAttributes.addFlashAttribute(PAGE, page);
         redirectAttributes.addFlashAttribute(PAGES, result.getTotalPages());
         redirectAttributes.addFlashAttribute(PAGE_SIZE, pageSize);
         redirectAttributes.addFlashAttribute(QUERY, query);
-        redirectAttributes.addFlashAttribute("data", list);
+        redirectAttributes.addFlashAttribute("rows", list);
         return "redirect:" + "queryResult";
     }
 

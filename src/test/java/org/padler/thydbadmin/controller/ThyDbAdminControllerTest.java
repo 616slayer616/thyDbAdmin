@@ -56,7 +56,7 @@ class ThyDbAdminControllerTest extends AbstractSpringBootTest {
     }
 
     @Test
-    void columns() throws Exception {
+    void table() throws Exception {
         List<String> columns = new ArrayList<>();
         columns.add("TEST_COLUMN");
         doReturn(columns).when(mockDbAdminService).getColumns("TEST_COLUMN");

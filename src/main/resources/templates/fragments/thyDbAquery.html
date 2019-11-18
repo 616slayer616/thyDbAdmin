@@ -16,6 +16,17 @@
     </form>
 </th:block>
 
+<th:block th:fragment="queryResult">
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th th:each="column : ${columns}"><span th:text="${column}"></span></th>
+        </tr>
+        <tr th:each="row : ${rows}">
+            <th th:each="col : ${row}"><span th:text="${col}"></span></th>
+        </tr>
+    </table>
+</th:block>
+
 <th:block th:fragment="pagination">     
     <th:block th:if="${pages != null && pages != 0}">   
         <ul class="pagination justify-content-center">
