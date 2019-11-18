@@ -4,22 +4,17 @@
 </head>
 <body>
 <th:block th:replace="fragments/thyDbAnav :: nav"></th:block>
-
 <div class="container mt-3">
-    <div th:fragment="tableList">
-        <div th:fragment="columnlist">
-            <div th:replace="fragments/thyDbAquery::query"></div>
-            <table class="table table-bordered table-striped">
-                <tr>
-                    <th th:each="column : ${columns}"><span th:text="${column}"></span></th>
-                </tr>
-                <tr th:each="row : ${rows}">
-                    <th th:each="col : ${row}"><span th:text="${col}"></span></th>
-                </tr>
-            </table>
-            <div th:replace="fragments/thyDbAquery::pagination"></div>
-        </div>
-    </div>
+    <th:block th:replace="fragments/thyDbAquery::query"></th:block>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th th:each="column : ${columns}"><span th:text="${column}"></span></th>
+        </tr>
+        <tr th:each="row : ${rows}">
+            <th th:each="col : ${row}"><span th:text="${col}"></span></th>
+        </tr>
+    </table>
+    <div th:replace="fragments/thyDbAquery::pagination"></div>
 </div>
 </body>
 </html>

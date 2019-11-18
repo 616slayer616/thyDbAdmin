@@ -3,7 +3,7 @@
 <head>
 </head>
 <body>
-<div th:fragment="query">
+<th:block th:fragment="query">
     <form th:action="@{/thyDbAdmin/executeQuery}" method="post">
         <div class="alert alert-danger" role="alert" th:if="${error != null}" th:text="${error}">
         </div>
@@ -14,9 +14,9 @@
             </div>
         </div>
     </form>
-</div>
+</th:block>
 
-<div th:fragment="pagination">     
+<th:block th:fragment="pagination">     
     <th:block th:if="${pages != null && pages != 0}">   
         <ul class="pagination justify-content-center">
 
@@ -39,9 +39,9 @@
 
         </ul>
     </th:block>
-</div>
+</th:block>
 
-<div th:fragment="queryPagination">     
+<th:block th:fragment="queryPagination">     
     <th:block th:if="${pages != null && pages != 0}">   
         <ul class="pagination justify-content-center">
 
@@ -79,6 +79,6 @@
 
         </ul>
     </th:block>
-</div>
+</th:block>
 </body>
 </html>
