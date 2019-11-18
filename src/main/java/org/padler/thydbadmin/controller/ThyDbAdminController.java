@@ -92,11 +92,12 @@ public class ThyDbAdminController {
             columns = new ArrayList<>(result.getContent().get(0).keySet());
         redirectAttributes.addFlashAttribute(COLUMNS, columns);
 
+        redirectAttributes.addFlashAttribute("rows", list);
         redirectAttributes.addFlashAttribute(PAGE, page);
         redirectAttributes.addFlashAttribute(PAGES, result.getTotalPages());
         redirectAttributes.addFlashAttribute(PAGE_SIZE, pageSize);
         redirectAttributes.addFlashAttribute(QUERY, query);
-        redirectAttributes.addFlashAttribute("rows", list);
+        redirectAttributes.addFlashAttribute("total", result.getTotalElements());
         return "redirect:" + "queryResult";
     }
 

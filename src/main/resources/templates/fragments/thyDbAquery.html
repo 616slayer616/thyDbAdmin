@@ -29,11 +29,12 @@
 
 <th:block th:fragment="pagination">     
     <th:block th:if="${pages != null && pages != 0}">   
+        <span class="float-right" th:text="${total} + ' rows'"></span>
         <ul class="pagination justify-content-center">
 
             <li class="page-item">
                 <a th:href="@{|/thyDbAdmin/table/${tableName}?page=${page <= 0 ? 0 : page - 1}&pageSize=${pageSize}|}"
-                   class="page-link"><span aria-hidden="true">«</span></a>
+                   class="page-link"><span>«</span></a>
             </li>
 
             <th:block th:each="i : ${#numbers.sequence(0, pages - 1)}">
@@ -45,7 +46,7 @@
 
             <li class="page-item">
                 <a th:href="@{|/thyDbAdmin/table/${tableName}?page=${page >= pages - 1 ? pages - 1 : page + 1}&pageSize=${pageSize}|}"
-                   class="page-link"><span aria-hidden="true">»</span></a>
+                   class="page-link"><span>»</span></a>
             </li>
 
         </ul>
@@ -54,6 +55,7 @@
 
 <th:block th:fragment="queryPagination">     
     <th:block th:if="${pages != null && pages != 0}">   
+        <span class="float-right" th:text="${total} + ' rows'"></span>
         <ul class="pagination justify-content-center">
 
             <li class="page-item">
