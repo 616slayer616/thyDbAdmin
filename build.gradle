@@ -17,8 +17,16 @@ test {
     useJUnitPlatform()
 }
 
+test.finalizedBy jacocoTestReport
+
 jacoco {
     toolVersion = "0.8.5"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
 }
 
 repositories {
@@ -44,6 +52,7 @@ sonarqube {
     properties {
         property "sonar.projectName", "thyDbAdmin"
         property "sonar.projectKey", "616slayer616_thyDbAdmin"
+        property "sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
     }
 }
 
