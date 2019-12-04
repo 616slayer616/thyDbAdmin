@@ -10,8 +10,7 @@ import java.sql.DatabaseMetaData;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DbAdminServiceTest extends AbstractSpringBootTest {
@@ -22,8 +21,8 @@ class DbAdminServiceTest extends AbstractSpringBootTest {
     @Test
     void SELECT_ALL() {
         Page<Map<String, Object>> result = dbAdminService.executeQuery("SELECT * FROM USERS");
-        assertTrue(result.getContent().isEmpty());
-        assertTrue(result.getTotalElements() == 0);
+        assertThat(result.getContent()).isEmpty();
+        assertThat(result.getTotalElements()).isZero();
     }
 
     @Test
@@ -32,13 +31,13 @@ class DbAdminServiceTest extends AbstractSpringBootTest {
         dbAdminService.executeQuery("INSERT INTO USER_ROLE (`USER_ROLE_ID`, `NAME`) VALUES (12, 'ROLE_USER')");
         Page<Map<String, Object>> rolesAfter = dbAdminService.executeQuery("SELECT * FROM USER_ROLE");
 
-        assertThat(rolesAfter.getTotalElements(), is(rolesBefore.getTotalElements() + 1));
+        assertThat(rolesAfter.getTotalElements()).isEqualTo(rolesBefore.getTotalElements() + 1);
     }
 
     @Test
     void getTables() {
         List<String> tables = dbAdminService.getTables();
-        assertThat(tables.size(), is(3));
+        assertThat(tables.size()).isEqualTo(3);
     }
 
     @Test
@@ -46,22 +45,22 @@ class DbAdminServiceTest extends AbstractSpringBootTest {
         List<String> users = dbAdminService.getColumns("USERS");
         List<String> usersRoles = dbAdminService.getColumns("USERS_ROLES");
         List<String> userRoles = dbAdminService.getColumns("USER_ROLE");
-        assertThat(users.size(), is(6));
-        assertThat(usersRoles.size(), is(2));
-        assertThat(userRoles.size(), is(2));
+        assertThat(users.size()).isEqualTo(6);
+        assertThat(usersRoles.size()).isEqualTo(2);
+        assertThat(userRoles.size()).isEqualTo(2);
     }
 
     @Test
     void getInfo() {
         DatabaseMetaData databaseMetaData = dbAdminService.getInfo();
-        assertNotNull(databaseMetaData);
+        assertThat(databaseMetaData).isNotNull();
     }
 
     @Test
     void getData() {
         Page<Object[]> usersRoles = dbAdminService.getData("USER_ROLE", 0, 10);
 
-        assertThat(usersRoles.getTotalElements(), is(11L));
+        assertThat(usersRoles.getTotalElements()).isEqualTo(11L);
     }
 
     @Test
