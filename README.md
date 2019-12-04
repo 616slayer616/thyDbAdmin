@@ -7,6 +7,8 @@
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=616slayer616_thyDbAdmin&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=616slayer616_thyDbAdmin)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=616slayer616_thyDbAdmin&metric=coverage)](https://sonarcloud.io/dashboard?id=616slayer616_thyDbAdmin)
 
+Inspired by phpMyAdmin and phpPgAdmin, ThyDbAdmin aims to integrate a database management tool into your Spring Boot application.
+
 ## Usage
 
 ### Gradle
@@ -22,3 +24,36 @@ implementation 'org.padler:thyDbAdmin:1.0.0'
   <version>1.0.0</version>
 </dependency>
 ```
+
+### Configuration
+
+#### Security configuration (optional)
+
+Let only "ADMIN" users access thyDbAdmin
+```
+@Override
+protected void configure(HttpSecurity http) throws Exception {
+     http
+        .authorizeRequests()
+        .antMatchers("/thyDbAdmin").hasRole("ADMIN");
+}
+```
+
+### Start
+
+Go to http://localhost:8080/thyDbAdmin
+
+Overview of the tables:
+![Overview](/docs/img/overview.png)
+
+---
+
+Query result:
+![Select](/docs/img/select.png)
+
+---
+
+Database information:
+![Database info](/docs/img/db_info.png)
+
+---
