@@ -27,6 +27,12 @@ implementation 'org.padler:thyDbAdmin:1.0.0'
 
 ### Configuration
 
+Enable thyDbAdmin Controllers (without this you can access the services but not the /thyDbAdmin URLs)
+```
+thyDbAdmin:
+  controller: true
+```
+
 #### Security configuration (optional)
 
 Let only "ADMIN" users access thyDbAdmin
