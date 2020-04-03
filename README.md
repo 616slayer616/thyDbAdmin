@@ -13,7 +13,7 @@ Inspired by phpMyAdmin and phpPgAdmin, ThyDbAdmin aims to integrate a database m
 
 ### Gradle
 ```
-implementation 'org.padler:thyDbAdmin:1.0.0'
+implementation 'org.padler:thyDbAdmin:1.1.0'
 ```
 
 ### Maven
@@ -21,7 +21,7 @@ implementation 'org.padler:thyDbAdmin:1.0.0'
 <dependency>
   <groupId>org.padler</groupId>
   <artifactId>thyDbAdmin</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
@@ -31,6 +31,12 @@ Enable thyDbAdmin Controllers (without this you can access the services but not 
 ```
 thyDbAdmin:
   controller: true
+```
+
+Disable Flyway auto configuration, in case of a FlywayException on startup
+```
+thyDbAdmin:
+  saveMode.enabled: true
 ```
 
 #### Security configuration (optional)
