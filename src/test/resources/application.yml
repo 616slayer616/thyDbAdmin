@@ -1,2 +1,3 @@
 thyDbAdmin.controller: true
+thyDbAdmin.saveMode.enabled: true
 spring.thymeleaf.cache: false

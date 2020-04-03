@@ -33,6 +33,12 @@ thyDbAdmin:
   controller: true
 ```
 
+Disable Flyway auto configuration, in case of a FlywayException on startup
+```
+thyDbAdmin:
+  saveMode.enabled: true
+```
+
 #### Security configuration (optional)
 
 Let only "ADMIN" users access thyDbAdmin

@@ -1,2 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 org.padler.thydbadmin.config.ThyDbAdminAutoConfiguration
+org.springframework.boot.autoconfigure.AutoConfigurationImportFilter=\
+org.padler.thydbadmin.config.DBAutoConfigurationImportFilter
