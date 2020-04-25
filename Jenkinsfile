@@ -44,7 +44,7 @@ pipeline {
           sh 'cp $FILE_PROPERTIES .'
           sh 'cp $FILE_KEY .'
         }
-        sh './gradlew publish'
+        sh './gradlew publish -Dorg.gradle.internal.publish.checksums.insecure=true'
       }
     }
   }
