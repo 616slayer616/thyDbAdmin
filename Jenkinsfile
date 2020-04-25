@@ -7,7 +7,7 @@ pipeline {
 
   agent {
     docker {
-      image 'mxml/jdk-scp'
+      image '616slayer616/jdk-selenium'
       alwaysPull true
     }
   }
