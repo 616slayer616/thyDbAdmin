@@ -13,7 +13,7 @@ Inspired by phpMyAdmin and phpPgAdmin, ThyDbAdmin aims to integrate a database m
 
 ### Gradle
 ```
-implementation 'org.padler:thyDbAdmin:1.1.0'
+implementation 'org.padler:thyDbAdmin:1.1.1'
 ```
 
 ### Maven
@@ -21,7 +21,7 @@ implementation 'org.padler:thyDbAdmin:1.1.0'
 <dependency>
   <groupId>org.padler</groupId>
   <artifactId>thyDbAdmin</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
 </dependency>
 ```
 

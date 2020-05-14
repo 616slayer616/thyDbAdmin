@@ -19,7 +19,7 @@ public class DBAutoConfigurationImportFilter implements AutoConfigurationImportF
 
     @Override
     public void setEnvironment(Environment environment) {
-        enabled = environment.getProperty("thyDbAdmin.saveMode.enabled", Boolean.class, true);
+        enabled = environment.getProperty("thyDbAdmin.saveMode.enabled", Boolean.class, false);
     }
 
     @Override
