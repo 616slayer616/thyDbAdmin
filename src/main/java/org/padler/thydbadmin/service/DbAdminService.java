@@ -19,6 +19,9 @@ import java.util.*;
 @Service
 public class DbAdminService {
 
+    public static final String QUERY_SELECT_ALL = "SELECT * FROM ";
+    public static final String QUERY_SELECT_COUNT_ALL = "SELECT COUNT(*) FROM ";
+
     @PersistenceContext
     protected EntityManager entityManager;
 
@@ -95,9 +98,9 @@ public class DbAdminService {
         String tableNameFromDB = first.orElseThrow(() ->
                 new SQLGrammarException("could not prepare statement", new SQLSyntaxErrorException("No such table " + tableName)));
 
-        Query count = entityManager.createNativeQuery("SELECT COUNT(*) FROM " + tableNameFromDB);
+        Query count = entityManager.createNativeQuery(QUERY_SELECT_COUNT_ALL + tableNameFromDB);
         BigInteger countResult = (BigInteger) count.getSingleResult();
-        Query select = entityManager.createNativeQuery("SELECT * FROM " + tableNameFromDB);
+        Query select = entityManager.createNativeQuery(QUERY_SELECT_ALL + tableNameFromDB);
         select.setMaxResults(pageSize);
         select.setFirstResult(pageSize * page);
 
