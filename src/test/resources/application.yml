@@ -1,3 +1,11 @@
 thyDbAdmin.controller: true
 thyDbAdmin.saveMode.enabled: true
-spring.thymeleaf.cache: false
+
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:12:///test
+    driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
+  jpa:
+    hibernate:
+      ddl-auto: update
+  thymeleaf.cache: false

@@ -3,13 +3,13 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id 'jacoco'
-    id 'org.sonarqube' version '2.8'
-    id 'org.springframework.boot' version '2.2.6.RELEASE'
+    id 'org.sonarqube' version '3.0'
+    id 'org.springframework.boot' version '2.3.2.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 }
 
 group 'org.padler'
-version '1.1.1'
+version '1.1.2'
 
 sourceCompatibility = 1.8
 
@@ -37,12 +37,13 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
     implementation('org.springframework.boot:spring-boot-starter-web')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
-    implementation('org.springframework.boot:spring-boot-devtools')
 
     // Test
     testImplementation('org.springframework.boot:spring-boot-starter-test')
     testImplementation('org.springframework.security:spring-security-test')
-    testImplementation('com.h2database:h2')
+    testImplementation('org.springframework.boot:spring-boot-starter-validation')
+    testImplementation('org.postgresql:postgresql')
+    testImplementation('org.testcontainers:postgresql:1.14.3')
 
     testImplementation('org.junit.jupiter:junit-jupiter-engine')
     testImplementation('org.mockito:mockito-junit-jupiter')

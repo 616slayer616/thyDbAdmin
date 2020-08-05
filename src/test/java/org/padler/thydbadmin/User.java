@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Entity
-@Table(name = "users", indexes = {@Index(columnList = "user_id,email")}) // user is a reserved keyword in postgreSQL
+@Table(name = "users") // user is a reserved keyword in postgreSQL
 public class User implements Serializable {
 
     @Id
