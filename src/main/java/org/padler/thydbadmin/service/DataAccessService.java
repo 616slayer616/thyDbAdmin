@@ -17,6 +17,8 @@ import java.util.Map;
 @Service
 public class DataAccessService {
 
+    public static final String QUERY_SELECT_COUNT = "SELECT COUNT(*) AS total FROM ({}) AS query";
+
     @PersistenceContext
     protected EntityManager entityManager;
 
@@ -29,11 +31,11 @@ public class DataAccessService {
         hibernateQuery.setFirstResult(page * pageSize);
         hibernateQuery.setMaxResults(pageSize);
 
-        return new PageImpl(hibernateQuery.getResultList(), PageRequest.of(page, pageSize), countResult.longValue());
+        return new PageImpl<>(hibernateQuery.getResultList(), PageRequest.of(page, pageSize), countResult.longValue());
     }
 
     private BigInteger countQuery(String sql) {
-        String count = "SELECT COUNT(*) AS total FROM ({}) AS query".replace("{}", sql);
+        String count = QUERY_SELECT_COUNT.replace("{}", sql);
         Query query = entityManager.createNativeQuery(count);
 
         List<BigInteger> resultList = query.getResultList();

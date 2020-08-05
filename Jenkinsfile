@@ -9,6 +9,8 @@ pipeline {
     docker {
       image '616slayer616/jdk-selenium'
       alwaysPull true
+      args '-v /var/run/docker.sock:/var/run/docker.sock'
+      args '--group-add 999'
     }
   }
 
