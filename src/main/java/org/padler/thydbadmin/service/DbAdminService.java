@@ -1,6 +1,7 @@
 package org.padler.thydbadmin.service;
 
 import org.hibernate.JDBCException;
+import org.hibernate.MappingException;
 import org.hibernate.exception.SQLGrammarException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -39,6 +40,9 @@ public class DbAdminService {
         try {
             return dataAccessService.executeQuery(sql, page, pageSize);
         } catch (Exception e) {
+            if (e.getCause() instanceof MappingException) {
+                return Page.empty();
+            }
             dataAccessService.executeUpdate(sql);
             return null;
         }
@@ -97,7 +101,18 @@ public class DbAdminService {
         select.setMaxResults(pageSize);
         select.setFirstResult(pageSize * page);
 
-        return (Page<Object[]>) new PageImpl(select.getResultList(), PageRequest.of(page, pageSize), countResult.longValue());
+        List<Object[]> resultList;
+        try {
+            resultList = select.getResultList();
+        } catch (Exception e) {
+            if (e.getCause() instanceof MappingException) {
+                resultList = Collections.emptyList();
+            } else {
+                throw e;
+            }
+        }
+
+        return new PageImpl<>(resultList, PageRequest.of(page, pageSize), countResult.longValue());
     }
 
 }

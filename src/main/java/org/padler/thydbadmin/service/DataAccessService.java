@@ -33,7 +33,7 @@ public class DataAccessService {
     }
 
     private BigInteger countQuery(String sql) {
-        String count = "SELECT COUNT(*) AS total FROM ({})".replace("{}", sql);
+        String count = "SELECT COUNT(*) AS total FROM ({}) AS query".replace("{}", sql);
         Query query = entityManager.createNativeQuery(count);
 
         List<BigInteger> resultList = query.getResultList();

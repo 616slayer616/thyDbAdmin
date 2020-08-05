@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
- import java.io.Serializable;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 
 @Entity
+@Table(name = "user_role")
 public class UserRole implements Serializable {
 
     @Id
