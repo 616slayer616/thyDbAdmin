@@ -28,7 +28,6 @@ class DbAdminServiceTest extends AbstractSpringBootTest {
     @Test
     void SELECT_ALL_UUID() {
         Page<Map<String, Object>> result = dbAdminService.executeQuery("SELECT * FROM uuid_table");
-        assertThat(result.getContent()).isEmpty();
         assertThat(result.getTotalElements()).isOne();
     }
 

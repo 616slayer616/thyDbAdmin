@@ -46,10 +46,16 @@ public class ThyDbAdminController {
     @GetMapping("/table/{tableName}")
     public String getTable(@PathVariable String tableName, @RequestParam(required = false, defaultValue = "0") Integer page,
                            @RequestParam(required = false, defaultValue = "10") Integer pageSize, Model model) {
-        List<String> columns = dbAdminService.getColumns(tableName);
         Page<Map<String, Object>> result = dbAdminService.getData(tableName, page, pageSize);
         model.addAttribute("tableName", tableName);
-        model.addAttribute(COLUMNS, columns);
+
+        if (result.isEmpty()) {
+            List<String> columns = dbAdminService.getColumns(tableName);
+            model.addAttribute(COLUMNS, columns);
+        } else {
+            model.addAttribute(COLUMNS, getColumnNames(result));
+        }
+
         model.addAttribute(ROWS, result.getContent());
         model.addAttribute(PAGE, page);
         model.addAttribute(PAGES, result.getTotalPages());
@@ -87,20 +93,25 @@ public class ThyDbAdminController {
             return "redirect:" + referer;
         }
 
-        List<Collection<Object>> list = result.getContent().stream()
-                .map(Map::values).collect(Collectors.toList());
-        ArrayList<String> columns = null;
-        if (!list.isEmpty())
-            columns = new ArrayList<>(result.getContent().get(0).keySet());
-        redirectAttributes.addFlashAttribute(COLUMNS, columns);
 
-        redirectAttributes.addFlashAttribute(ROWS, list);
+        redirectAttributes.addFlashAttribute(COLUMNS, getColumnNames(result));
+        redirectAttributes.addFlashAttribute(ROWS, result.getContent());
         redirectAttributes.addFlashAttribute(PAGE, page);
         redirectAttributes.addFlashAttribute(PAGES, result.getTotalPages());
         redirectAttributes.addFlashAttribute(PAGE_SIZE, pageSize);
         redirectAttributes.addFlashAttribute(QUERY, query);
         redirectAttributes.addFlashAttribute(TOTAL, result.getTotalElements());
         return "redirect:" + "queryResult";
+    }
+
+    private ArrayList<String> getColumnNames(Page<Map<String, Object>> result) {
+        List<Collection<Object>> list = result.getContent().stream()
+                .map(Map::values).collect(Collectors.toList());
+        ArrayList<String> columns = null;
+        if (!list.isEmpty())
+            columns = new ArrayList<>(result.getContent().get(0).keySet());
+
+        return columns;
     }
 
 }

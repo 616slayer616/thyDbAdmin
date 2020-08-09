@@ -22,7 +22,7 @@
             <th th:each="column : ${columns}"><span th:text="${column}"></span></th>
         </tr>
         <tr th:each="row : ${rows}">
-            <th th:each="col : ${row}"><span th:text="${col}"></span></th>
+            <th th:each="col : ${row}"><span th:text="${col.value}"></span></th>
         </tr>
     </table>
 </th:block>

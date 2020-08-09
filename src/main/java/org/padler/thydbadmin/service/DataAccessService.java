@@ -1,7 +1,5 @@
 package org.padler.thydbadmin.service;
 
-import org.hibernate.MappingException;
-import org.hibernate.transform.AliasToEntityMapResultTransformer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -11,10 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.sql.DataSource;
 import java.math.BigInteger;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.sql.*;
+import java.util.*;
 
 @Service
 public class DataAccessService {
@@ -24,27 +22,42 @@ public class DataAccessService {
     @PersistenceContext
     protected EntityManager entityManager;
 
+    private final DataSource dataSource;
+
+    public DataAccessService(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
     public Page<Map<String, Object>> executeQuery(String sql, int page, int pageSize) {
         BigInteger countResult = countQuery(sql);
-        Query query = entityManager.createNativeQuery(sql);
 
-        org.hibernate.query.Query<Map<String, Object>> hibernateQuery = ((org.hibernate.query.Query<Map<String, Object>>) query);
-        hibernateQuery.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
-        hibernateQuery.setFirstResult(page * pageSize);
-        hibernateQuery.setMaxResults(pageSize);
-
-        List<Map<String, Object>> resultList;
+        List<Map<String, Object>> resultList = Collections.emptyList();
         try {
-            resultList = hibernateQuery.getResultList();
-        } catch (Exception e) {
-            if (e.getCause() instanceof MappingException) {
-                resultList = Collections.emptyList();
-            } else {
-                throw e;
-            }
+            resultList = jdbcQuery(sql, page, pageSize);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return new PageImpl<>(resultList, PageRequest.of(page, pageSize), countResult.longValue());
+    }
+
+    private List<Map<String, Object>> jdbcQuery(String sql, int page, int pageSize) throws SQLException {
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        Connection connection = dataSource.getConnection();
+
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql + " LIMIT " + pageSize + " OFFSET " + page);
+        ResultSetMetaData rsmd = resultSet.getMetaData();
+        while (resultSet.next()) {
+            Map<String, Object> result = new HashMap<>();
+            for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
+                String columnName = rsmd.getColumnName(i);
+                String columnData = resultSet.getString(i);
+                result.put(columnName, columnData);
+            }
+            resultList.add(result);
+        }
+        return resultList;
     }
 
     private BigInteger countQuery(String sql) {
