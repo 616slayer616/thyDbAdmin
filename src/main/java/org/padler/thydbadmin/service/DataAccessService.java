@@ -1,5 +1,6 @@
 package org.padler.thydbadmin.service;
 
+import org.hibernate.MappingException;
 import org.hibernate.transform.AliasToEntityMapResultTransformer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -11,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +33,18 @@ public class DataAccessService {
         hibernateQuery.setFirstResult(page * pageSize);
         hibernateQuery.setMaxResults(pageSize);
 
-        return new PageImpl<>(hibernateQuery.getResultList(), PageRequest.of(page, pageSize), countResult.longValue());
+        List<Map<String, Object>> resultList;
+        try {
+            resultList = hibernateQuery.getResultList();
+        } catch (Exception e) {
+            if (e.getCause() instanceof MappingException) {
+                resultList = Collections.emptyList();
+            } else {
+                throw e;
+            }
+        }
+
+        return new PageImpl<>(resultList, PageRequest.of(page, pageSize), countResult.longValue());
     }
 
     private BigInteger countQuery(String sql) {

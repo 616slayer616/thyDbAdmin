@@ -4,15 +4,9 @@ import org.hibernate.JDBCException;
 import org.hibernate.MappingException;
 import org.hibernate.exception.SQLGrammarException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.sql.DataSource;
-import java.math.BigInteger;
 import java.sql.*;
 import java.util.*;
 
@@ -20,10 +14,6 @@ import java.util.*;
 public class DbAdminService {
 
     public static final String QUERY_SELECT_ALL = "SELECT * FROM ";
-    public static final String QUERY_SELECT_COUNT_ALL = "SELECT COUNT(*) FROM ";
-
-    @PersistenceContext
-    protected EntityManager entityManager;
 
     private final DataAccessService dataAccessService;
     private final DataSource dataSource;
@@ -92,30 +82,13 @@ public class DbAdminService {
         }
     }
 
-    public Page<Object[]> getData(String tableName, int page, int pageSize) {
+    public Page<Map<String, Object>> getData(String tableName, int page, int pageSize) {
         List<String> tables = getTables();
         Optional<String> first = tables.stream().filter(s -> s.equalsIgnoreCase(tableName)).findFirst();
         String tableNameFromDB = first.orElseThrow(() ->
                 new SQLGrammarException("could not prepare statement", new SQLSyntaxErrorException("No such table " + tableName)));
 
-        Query count = entityManager.createNativeQuery(QUERY_SELECT_COUNT_ALL + tableNameFromDB);
-        BigInteger countResult = (BigInteger) count.getSingleResult();
-        Query select = entityManager.createNativeQuery(QUERY_SELECT_ALL + tableNameFromDB);
-        select.setMaxResults(pageSize);
-        select.setFirstResult(pageSize * page);
-
-        List<Object[]> resultList;
-        try {
-            resultList = select.getResultList();
-        } catch (Exception e) {
-            if (e.getCause() instanceof MappingException) {
-                resultList = Collections.emptyList();
-            } else {
-                throw e;
-            }
-        }
-
-        return new PageImpl<>(resultList, PageRequest.of(page, pageSize), countResult.longValue());
+        return dataAccessService.executeQuery(QUERY_SELECT_ALL + tableNameFromDB, page, pageSize);
     }
 
 }

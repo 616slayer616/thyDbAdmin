@@ -47,7 +47,7 @@ public class ThyDbAdminController {
     public String getTable(@PathVariable String tableName, @RequestParam(required = false, defaultValue = "0") Integer page,
                            @RequestParam(required = false, defaultValue = "10") Integer pageSize, Model model) {
         List<String> columns = dbAdminService.getColumns(tableName);
-        Page<Object[]> result = dbAdminService.getData(tableName, page, pageSize);
+        Page<Map<String, Object>> result = dbAdminService.getData(tableName, page, pageSize);
         model.addAttribute("tableName", tableName);
         model.addAttribute(COLUMNS, columns);
         model.addAttribute(ROWS, result.getContent());

@@ -29,7 +29,7 @@ class DbAdminServiceTest extends AbstractSpringBootTest {
     void SELECT_ALL_UUID() {
         Page<Map<String, Object>> result = dbAdminService.executeQuery("SELECT * FROM uuid_table");
         assertThat(result.getContent()).isEmpty();
-        assertThat(result.getTotalElements()).isZero();
+        assertThat(result.getTotalElements()).isOne();
     }
 
     @Test
@@ -65,14 +65,14 @@ class DbAdminServiceTest extends AbstractSpringBootTest {
 
     @Test
     void getDataWIthUUID() {
-        Page<Object[]> uuids = dbAdminService.getData("uuid_table", 0, 10);
+        Page<Map<String, Object>> uuids = dbAdminService.getData("uuid_table", 0, 10);
 
         assertThat(uuids.getTotalElements()).isEqualTo(1L);
     }
 
     @Test
     void getData() {
-        Page<Object[]> usersRoles = dbAdminService.getData("user_role", 0, 10);
+        Page<Map<String, Object>> usersRoles = dbAdminService.getData("user_role", 0, 10);
 
         assertThat(usersRoles.getTotalElements()).isEqualTo(11L);
     }
