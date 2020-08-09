@@ -30,12 +30,17 @@ public class DbAdminService {
 
     @SuppressWarnings("squid:S1168")
     public Page<Map<String, Object>> executeQuery(String sql, int page, int pageSize) {
-        try {
-            return dataAccessService.executeQuery(sql, page, pageSize);
-        } catch (Exception e) {
-            if (e.getCause() instanceof MappingException) {
-                return Page.empty();
+        sql = sql.trim();
+        if (sql.toUpperCase().startsWith("SELECT")) {
+            try {
+                return dataAccessService.executeQuery(sql, page, pageSize);
+            } catch (Exception e) {
+                if (e.getCause() instanceof MappingException) {
+                    return Page.empty();
+                }
+                throw e;
             }
+        } else {
             dataAccessService.executeUpdate(sql);
             return null;
         }
