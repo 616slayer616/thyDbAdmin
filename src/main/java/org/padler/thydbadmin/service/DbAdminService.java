@@ -80,11 +80,7 @@ public class DbAdminService {
     }
 
     public DatabaseMetaData getInfo() {
-        try (Connection connection = dataSource.getConnection()) {
-            return connection.getMetaData();
-        } catch (SQLException e) {
-            throw new JDBCException("", e);
-        }
+        return dataAccessService.getInfo();
     }
 
     public Page<Map<String, Object>> getData(String tableName, int page, int pageSize) {

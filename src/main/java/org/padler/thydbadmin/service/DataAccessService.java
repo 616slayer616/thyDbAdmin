@@ -1,5 +1,6 @@
 package org.padler.thydbadmin.service;
 
+import org.hibernate.JDBCException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +29,14 @@ public class DataAccessService {
         this.dataSource = dataSource;
     }
 
+    public DatabaseMetaData getInfo() {
+        try (Connection connection = dataSource.getConnection()) {
+            return connection.getMetaData();
+        } catch (SQLException e) {
+            throw new JDBCException("", e);
+        }
+    }
+
     public Page<Map<String, Object>> executeQuery(String sql, int page, int pageSize) {
         BigInteger countResult = countQuery(sql);
 
@@ -38,7 +47,33 @@ public class DataAccessService {
             e.printStackTrace();
         }
 
-        return new PageImpl<>(resultList, PageRequest.of(page, pageSize), countResult.longValue());
+        if (resultList.size() > pageSize) {
+            return new PageImpl<>(resultList, PageRequest.of(0, resultList.size()), countResult.longValue());
+        } else {
+            return new PageImpl<>(resultList, PageRequest.of(page, pageSize), countResult.longValue());
+        }
+    }
+
+    private String createPaging(String sql, int page, int pageSize) {
+        DatabaseMetaData info = getInfo();
+        String dbVendor = "";
+        int offset = page * pageSize;
+        try {
+            dbVendor = info.getDatabaseProductName();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        switch (dbVendor) {
+            case "PostgreSQL":
+                sql = "SELECT * FROM (" + sql + ") AS query" + " LIMIT " + pageSize + " OFFSET " + offset;
+                break;
+            case "DB2":
+            case "H2":
+            case "MySQL":
+                sql = "SELECT * FROM (" + sql + ") AS query" + " LIMIT " + pageSize + ", " + offset;
+                break;
+        }
+        return sql;
     }
 
     private List<Map<String, Object>> jdbcQuery(String sql, int page, int pageSize) throws SQLException {
@@ -46,7 +81,7 @@ public class DataAccessService {
         Connection connection = dataSource.getConnection();
 
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM (" + sql + ") AS query" + " LIMIT " + pageSize + " OFFSET " + page);
+        ResultSet resultSet = statement.executeQuery(createPaging(sql, page, pageSize));
         ResultSetMetaData rsmd = resultSet.getMetaData();
         while (resultSet.next()) {
             Map<String, Object> result = new HashMap<>();
