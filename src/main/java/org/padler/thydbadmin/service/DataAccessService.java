@@ -46,7 +46,7 @@ public class DataAccessService {
         Connection connection = dataSource.getConnection();
 
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(sql + " LIMIT " + pageSize + " OFFSET " + page);
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM (" + sql + ") AS query" + " LIMIT " + pageSize + " OFFSET " + page);
         ResultSetMetaData rsmd = resultSet.getMetaData();
         while (resultSet.next()) {
             Map<String, Object> result = new HashMap<>();
