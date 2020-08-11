@@ -10,10 +10,10 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 
+import static org.padler.thydbadmin.service.DataAccessService.QUERY_SELECT_ALL;
+
 @Service
 public class DbAdminService {
-
-    public static final String QUERY_SELECT_ALL = "SELECT * FROM ";
 
     private final DataAccessService dataAccessService;
     private final DataSource dataSource;

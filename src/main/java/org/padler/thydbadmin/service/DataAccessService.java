@@ -19,6 +19,12 @@ import java.util.*;
 public class DataAccessService {
 
     public static final String QUERY_SELECT_COUNT = "SELECT COUNT(*) AS total FROM ({}) AS query";
+    public static final String DATABASE_PRODUCT_NAME_PG = "PostgreSQL";
+    public static final String DATABASE_PRODUCT_NAME_MY = "MySQL";
+    public static final String DATABASE_PRODUCT_NAME_H2 = "H2";
+    public static final String DATABASE_PRODUCT_NAME_DB2 = "DB2";
+    public static final String QUERY_SELECT_ALL = "SELECT * FROM ";
+    public static final String QUERY_LIMIT = " LIMIT ";
 
     @PersistenceContext
     protected EntityManager entityManager;
@@ -64,13 +70,13 @@ public class DataAccessService {
             e.printStackTrace();
         }
         switch (dbVendor) {
-            case "PostgreSQL":
-                sql = "SELECT * FROM (" + sql + ") AS query" + " LIMIT " + pageSize + " OFFSET " + offset;
+            case DATABASE_PRODUCT_NAME_PG:
+                sql = QUERY_SELECT_ALL + " (" + sql + ") AS query" + QUERY_LIMIT + pageSize + " OFFSET " + offset;
                 break;
-            case "DB2":
-            case "H2":
-            case "MySQL":
-                sql = "SELECT * FROM (" + sql + ") AS query" + " LIMIT " + pageSize + ", " + offset;
+            case DATABASE_PRODUCT_NAME_DB2:
+            case DATABASE_PRODUCT_NAME_H2:
+            case DATABASE_PRODUCT_NAME_MY:
+                sql = QUERY_SELECT_ALL + " (" + sql + ") AS query" + QUERY_LIMIT + pageSize + ", " + offset;
                 break;
         }
         return sql;
