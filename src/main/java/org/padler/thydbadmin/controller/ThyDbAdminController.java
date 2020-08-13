@@ -93,7 +93,6 @@ public class ThyDbAdminController {
             return "redirect:" + referer;
         }
 
-
         redirectAttributes.addFlashAttribute(COLUMNS, getColumnNames(result));
         redirectAttributes.addFlashAttribute(ROWS, result.getContent());
         redirectAttributes.addFlashAttribute(PAGE, page);

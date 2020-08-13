@@ -23,7 +23,6 @@ public class DbAdminService {
         this.dataSource = dataSource;
     }
 
-    @SuppressWarnings("squid:S1168")
     public Page<Map<String, Object>> executeQuery(String sql) {
         return executeQuery(sql, 0, 10);
     }
@@ -58,7 +57,6 @@ public class DbAdminService {
         } catch (SQLException e) {
             throw new JDBCException("", e);
         }
-
         return result;
     }
 
@@ -75,7 +73,6 @@ public class DbAdminService {
         } catch (SQLException e) {
             throw new JDBCException("", e);
         }
-
         return new ArrayList<>(result.values());
     }
 

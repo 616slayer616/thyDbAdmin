@@ -1,6 +1,8 @@
 package org.padler.thydbadmin.service;
 
 import org.hibernate.JDBCException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -13,10 +15,15 @@ import javax.persistence.Query;
 import javax.sql.DataSource;
 import java.math.BigInteger;
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class DataAccessService {
+
+    private static final Logger logger = LoggerFactory.getLogger(DataAccessService.class);
 
     public static final String QUERY_SELECT_COUNT = "SELECT COUNT(*) AS total FROM ({}) AS query";
     public static final String DATABASE_PRODUCT_NAME_PG = "PostgreSQL";
@@ -46,12 +53,7 @@ public class DataAccessService {
     public Page<Map<String, Object>> executeQuery(String sql, int page, int pageSize) {
         BigInteger countResult = countQuery(sql);
 
-        List<Map<String, Object>> resultList = Collections.emptyList();
-        try {
-            resultList = jdbcQuery(sql, page, pageSize);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        List<Map<String, Object>> resultList = jdbcQuery(sql, page, pageSize);
 
         if (resultList.size() > pageSize) {
             return new PageImpl<>(resultList, PageRequest.of(0, resultList.size()), countResult.longValue());
@@ -67,7 +69,7 @@ public class DataAccessService {
         try {
             dbVendor = info.getDatabaseProductName();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         switch (dbVendor) {
             case DATABASE_PRODUCT_NAME_PG:
@@ -78,26 +80,31 @@ public class DataAccessService {
             case DATABASE_PRODUCT_NAME_MY:
                 sql = QUERY_SELECT_ALL + " (" + sql + ") AS query" + QUERY_LIMIT + pageSize + ", " + offset;
                 break;
+            default:
         }
         return sql;
     }
 
-    private List<Map<String, Object>> jdbcQuery(String sql, int page, int pageSize) throws SQLException {
+    private List<Map<String, Object>> jdbcQuery(String sql, int page, int pageSize) {
         List<Map<String, Object>> resultList = new ArrayList<>();
-        Connection connection = dataSource.getConnection();
 
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(createPaging(sql, page, pageSize));
-        ResultSetMetaData rsmd = resultSet.getMetaData();
-        while (resultSet.next()) {
-            Map<String, Object> result = new HashMap<>();
-            for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
-                String columnName = rsmd.getColumnName(i);
-                String columnData = resultSet.getString(i);
-                result.put(columnName, columnData);
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(createPaging(sql, page, pageSize))) {
+            ResultSetMetaData rsmd = resultSet.getMetaData();
+            while (resultSet.next()) {
+                Map<String, Object> result = new HashMap<>();
+                for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
+                    String columnName = rsmd.getColumnName(i);
+                    String columnData = resultSet.getString(i);
+                    result.put(columnName, columnData);
+                }
+                resultList.add(result);
             }
-            resultList.add(result);
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
         }
+
         return resultList;
     }
 
@@ -110,6 +117,7 @@ public class DataAccessService {
     }
 
     @Transactional
+    @SuppressWarnings("javasecurity:S3649")
     public int executeUpdate(String sql) {
         return entityManager.createNativeQuery(sql).executeUpdate();
     }
