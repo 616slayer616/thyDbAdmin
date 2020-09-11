@@ -4,12 +4,12 @@ plugins {
     id 'signing'
     id 'jacoco'
     id 'org.sonarqube' version '3.0'
-    id 'org.springframework.boot' version '2.3.2.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'org.springframework.boot' version '2.3.3.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 }
 
 group 'org.padler'
-version '1.2.0'
+version '1.2.1'
 
 sourceCompatibility = 1.8
 
