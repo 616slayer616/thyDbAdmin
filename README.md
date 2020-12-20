@@ -47,7 +47,7 @@ Let only "ADMIN" users access thyDbAdmin
 protected void configure(HttpSecurity http) throws Exception {
      http
         .authorizeRequests()
-        .antMatchers("/thyDbAdmin").hasRole("ADMIN");
+        .antMatchers("/thyDbAdmin/**").hasRole("ADMIN");
 }
 ```
 
