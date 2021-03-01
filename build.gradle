@@ -43,7 +43,7 @@ dependencies {
     testImplementation('org.springframework.security:spring-security-test')
     testImplementation('org.springframework.boot:spring-boot-starter-validation')
     testImplementation('org.postgresql:postgresql')
-    testImplementation('org.testcontainers:postgresql:1.14.3')
+    testImplementation('org.testcontainers:postgresql:1.15.2')
 
     testImplementation('org.junit.jupiter:junit-jupiter-engine')
     testImplementation('org.mockito:mockito-junit-jupiter')
