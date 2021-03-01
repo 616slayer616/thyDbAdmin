@@ -1,5 +1,5 @@
 # thyDbAdmin
-[![Build Status](https://api.travis-ci.com/616slayer616/thyDbAdmin.svg?branch=master)](https://travis-ci.com/github/616slayer616/thyDbAdmin)
+[![Build Status](https://github.com/616slayer616/thyDbAdmin/actions/workflows/gradle.yml/badge.svg)](https://github.com/616slayer616/thyDbAdmin/actions/workflows/gradle.yml/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=616slayer616_thyDbAdmin&metric=alert_status)](https://sonarcloud.io/dashboard?id=616slayer616_thyDbAdmin)
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=616slayer616_thyDbAdmin&metric=bugs)](https://sonarcloud.io/dashboard?id=616slayer616_thyDbAdmin)
