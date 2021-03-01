@@ -13,10 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.persistence.PersistenceException;
 import java.sql.DatabaseMetaData;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.Mockito.*;
@@ -55,6 +52,20 @@ class ThyDbAdminControllerTest extends AbstractSpringBootTest {
 
     @Test
     void table() throws Exception {
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        Map<String, Object> resultEntry = new HashMap<>();
+        resultEntry.put("TEST_COLUMN", "test");
+        resultList.add(resultEntry);
+        PageImpl<Map<String, Object>> queryResult = new PageImpl<>(resultList, PageRequest.of(0, 10), 0);
+        doReturn(queryResult).when(mockDbAdminService).getData(eq("TEST_COLUMN"), anyInt(), anyInt());
+
+        mockMvc.perform(get("/thyDbAdmin/table/TEST_COLUMN"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("TEST_COLUMN")));
+    }
+
+    @Test
+    void table_empty() throws Exception {
         List<String> columns = new ArrayList<>();
         columns.add("TEST_COLUMN");
         doReturn(columns).when(mockDbAdminService).getColumns("TEST_COLUMN");
