@@ -24,8 +24,14 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build -s
-    - name: Sonarqube analysis
-      run: ./gradlew sonarqube
-      env:
-        super_secret: ${{ secrets.SONARKEY }}
 
+  sonarcloud:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: SonarCloud Scan
+        run: ./gradlew sonarqube
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARKEY }}
