@@ -1,0 +1,2 @@
+queries:
+  - exclude: java/sql-injection
