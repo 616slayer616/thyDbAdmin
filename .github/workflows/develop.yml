@@ -11,6 +11,11 @@ jobs:
 
     steps:
 
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '20'
+
       - name: git checkout
         uses: actions/checkout@v2
         with:
