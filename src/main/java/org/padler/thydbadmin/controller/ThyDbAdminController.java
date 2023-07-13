@@ -8,8 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.persistence.PersistenceException;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.persistence.PersistenceException;
+import jakarta.servlet.http.HttpServletRequest;
 import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
 import java.util.Collection;

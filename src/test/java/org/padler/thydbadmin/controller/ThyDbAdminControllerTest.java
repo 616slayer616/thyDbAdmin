@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.persistence.PersistenceException;
+import jakarta.persistence.PersistenceException;
 import java.sql.DatabaseMetaData;
 import java.util.*;
 

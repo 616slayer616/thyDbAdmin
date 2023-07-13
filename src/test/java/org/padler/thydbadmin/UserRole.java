@@ -3,7 +3,7 @@ package org.padler.thydbadmin;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.NaturalId;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
